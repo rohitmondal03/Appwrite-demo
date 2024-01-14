@@ -9,5 +9,5 @@ export function signIn(email: string, password: string) {
 
   promise
     .then(resp => console.log(resp))
-    .catch(error => console.log(error))
+    .catch((error: Error) => alert(error.message))
 }
