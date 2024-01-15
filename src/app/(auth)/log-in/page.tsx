@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 
-import { useAtom } from "jotai";
-
 import { useAuth } from "@/hooks/use-auth";
 import { appwriteAccount } from "@/lib/appwrite";
 import { redirect, useRouter } from "next/navigation";
@@ -18,6 +16,10 @@ export default function LogInPage() {
   });
 
 
+  // session present ==> redirect
+  if (isSession) redirect("/todos");
+
+
   // login user
   function login(email: string, password: string) {
     const promise = appwriteAccount.createEmailSession(email, password);
@@ -26,10 +28,6 @@ export default function LogInPage() {
       .then(() => changeSession(true))
       .catch((error) => alert(error))
   }
-
-
-  // session present ==> redirect
-  if (isSession) redirect("/");
 
 
   return (

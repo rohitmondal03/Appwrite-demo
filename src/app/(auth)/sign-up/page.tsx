@@ -1,16 +1,33 @@
 "use client"
 
 import { useState } from "react";
+import { ID } from "appwrite"
 
-import { signIn } from "@/lib/functions/sign-in";
-import { db } from "db/db";
+import { appwriteAccount } from "@/lib/appwrite"
+import { useAuth } from "@/hooks/use-auth";
+import { useRouter } from "next/navigation";
 
 
 export default function SigninPage() {
+  const { changeSession, isSession } = useAuth();
+  const { push } = useRouter();
   const [user, setUser] = useState({
     email: "",
     password: ""
   })
+
+
+  if (isSession) push("/todos")
+
+
+  function signIn(email: string, password: string) {
+    const uId = ID.unique();
+    const promise = appwriteAccount.create(uId, email, password);
+
+    promise
+      .then(() => changeSession(true))
+      .catch((error: Error) => alert(error.message))
+  }
 
 
   return (
