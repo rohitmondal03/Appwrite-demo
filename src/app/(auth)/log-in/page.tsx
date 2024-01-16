@@ -20,16 +20,6 @@ export default function LogInPage() {
   if (isSession) redirect("/todos");
 
 
-  // login user
-  function login(email: string, password: string) {
-    const promise = appwriteAccount.createEmailSession(email, password);
-
-    promise
-      .then(() => changeSession(true))
-      .catch((error) => alert(error))
-  }
-
-
   return (
     <section className="flex items-center justify-between">
       <div className="w-[50%] h-screen bg-slate-600" />
@@ -38,7 +28,7 @@ export default function LogInPage() {
         className="w-[50%] px-10 flex flex-col space-y-10"
         onSubmit={(e) => {
           e.preventDefault();
-          login(user.email, user.password)
+          // login(user.email, user.password)
         }}
       >
         <h1 className="text-3xl font-bold">Welcome back User</h1>

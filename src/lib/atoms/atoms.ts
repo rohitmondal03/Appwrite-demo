@@ -1,3 +1,8 @@
 import { atom } from "jotai";
+import { Models } from "appwrite"
 
-export const isUserLoggedIn = atom(false)
+import type { TUserDetails } from "types";
+
+
+export const isSessionPresent = atom(false)
+export const userDetails = atom<TUserDetails | null>(null);

@@ -1,13 +1,13 @@
 import { useAtom } from "jotai";
 
-import { isUserLoggedIn } from "@/lib/atoms/atoms";
+import { isSessionPresent } from "@/lib/atoms/atoms";
 
 
 export function useAuth() {
-  const [isLoggedIn, setUserLoggedIn] = useAtom(isUserLoggedIn);
+  const [isSession, setSession] = useAtom(isSessionPresent);
 
   return {
-    isSession: isLoggedIn,
-    changeSession: setUserLoggedIn
+    isSession: isSession,
+    changeSession: setSession
   }
 }
