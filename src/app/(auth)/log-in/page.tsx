@@ -1,14 +1,13 @@
 "use client"
 
+import { redirect, useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { useAuth } from "@/hooks/use-auth";
-import { appwriteAccount } from "@/lib/appwrite";
-import { redirect, useRouter } from "next/navigation";
 
 
 export default function LogInPage() {
-  const { isSession, changeSession } = useAuth();
+  const { isSession, logInUser } = useAuth();
   const { push } = useRouter();
   const [user, setUser] = useState({
     email: "",
@@ -28,7 +27,7 @@ export default function LogInPage() {
         className="w-[50%] px-10 flex flex-col space-y-10"
         onSubmit={(e) => {
           e.preventDefault();
-          // login(user.email, user.password)
+          logInUser(user.email, user.password)
         }}
       >
         <h1 className="text-3xl font-bold">Welcome back User</h1>

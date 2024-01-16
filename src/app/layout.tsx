@@ -3,6 +3,7 @@ import { type Metadata } from "next";
 
 import type { TLayoutProps } from "types";
 import JotaiProvider from "@/lib/providers/jotai-provider";
+import AuthContextProvider from "@/lib/providers/auth-context-provider";
 import Navbar from "@/components/navbar";
 import "@/styles/globals.css";
 
@@ -22,10 +23,12 @@ export default function RootLayout({ children }: TLayoutProps) {
   return (
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
-        <JotaiProvider>
-          <Navbar />
-          <main>{children}</main>
-        </JotaiProvider>
+        <AuthContextProvider>
+          <JotaiProvider>
+            <Navbar />
+            <main>{children}</main>
+          </JotaiProvider>
+        </AuthContextProvider>
       </body>
     </html>
   );

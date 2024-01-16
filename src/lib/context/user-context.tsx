@@ -1,6 +1,9 @@
+"use client"
+
+import { useRouter } from 'next/navigation';
 import { createContext, useEffect } from 'react'
 import { useAtom } from 'jotai';
-import { ID } from 'appwrite';
+import { ID, Models } from 'appwrite';
 
 import type { TLayoutProps, TUserDetails } from 'types';
 import { isSessionPresent, userDetails } from '../atoms/atoms';
@@ -9,18 +12,21 @@ import { appwriteAccount } from '../appwrite';
 
 type TAuthContext = {
   isSession: boolean;
-  user: TUserDetails | null;
+  // user: TUserDetails;
+  user: Models.User<Models.Preferences>;
   signUpUser: (email: string, password: string) => void;
   logInUser: (email: string, password: string) => void;
+  logout: () => void;
 }
 
 
 export const AuthContext = createContext<TAuthContext | undefined>(undefined);
 
 
-export default function UserContext({ children }: TLayoutProps) {
+export default function UserContextProvider({ children }: TLayoutProps) {
   const [isSession, setSession] = useAtom(isSessionPresent);
   const [user, setUser] = useAtom(userDetails);
+  const { push } = useRouter();
 
 
   // sign up user
@@ -45,20 +51,35 @@ export default function UserContext({ children }: TLayoutProps) {
   }
 
 
+  // function to logout user
+  async function logout() {
+    await appwriteAccount.deleteSession("current")
+      .then(() => {
+        setSession(false);
+        setUser(null);
+        push("/")
+      })
+      .catch(err => alert(`Can't logout. ${err}`))
+  }
+
+
   // init function
   async function fetchUserDetails() {
     try {
       const loggedIn = await appwriteAccount.get()
-      setSession(loggedIn.$id ? true : false);
-    } catch (error) {
-      alert(`Cant get information. ${error}`)
+      setUser(loggedIn);
+      setSession(true);
+    } catch (err) {
+      setUser(null);
+      setSession(false);
     }
   }
 
 
   useEffect(() => {
     fetchUserDetails();
-  }, [])
+    console.log(user)
+  }, [isSession])
 
 
   return (
@@ -67,6 +88,7 @@ export default function UserContext({ children }: TLayoutProps) {
       user,
       signUpUser,
       logInUser,
+      logout,
     }}>
       {children}
     </AuthContext.Provider>

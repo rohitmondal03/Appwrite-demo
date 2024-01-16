@@ -1,13 +1,13 @@
-import { useAtom } from "jotai";
-
-import { isSessionPresent } from "@/lib/atoms/atoms";
+import { AuthContext } from "@/lib/context/user-context";
+import { useContext } from "react";
 
 
 export function useAuth() {
-  const [isSession, setSession] = useAtom(isSessionPresent);
+  const sessionContext= useContext(AuthContext);
 
-  return {
-    isSession: isSession,
-    changeSession: setSession
+  if(!sessionContext) {
+    throw new Error("useAuth must be wrapped in a UserContextProvider.")
   }
+
+  return sessionContext;
 }

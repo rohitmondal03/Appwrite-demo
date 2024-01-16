@@ -1,23 +1,50 @@
 "use client"
 
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
+import { useRef } from "react";
+import { ID } from "appwrite";
 
 import { useAuth } from "@/hooks/use-auth"
-import { addTodo } from "@/actions/add-todos";
-import SubmitTodo from "@/components/buttons/submit-todo";
+import { env } from "@/env";
+import { appWriteDb } from "@/lib/appwrite";
 
 
 export default function ToDosPage() {
-  const { isSession } = useAuth();
+  const { isSession, user } = useAuth();
+  const { push } = useRouter();
+  const input = useRef<HTMLInputElement | null>(null)
 
-  if (!isSession) redirect("/sign-up")
+  if (!isSession) {
+    redirect("/log-in")
+  }
+
+
+  async function addTodo(todo: any) {
+    await appWriteDb.createDocument(
+      env.NEXT_PUBLIC_APPWRITE_DB_ID,
+      env.NEXT_PUBLIC_APPWRITE_COL_ID,
+      ID.unique(),
+      todo,
+    )
+      .then((resp) => console.log(resp))
+      .catch((err) => console.log(err))
+  }
+
 
   return (
     <section>
-      <form action={() => addTodo("hello")}>
+      <form onSubmit={(e) => {
+        e.preventDefault();
+        addTodo({ todo: input.current?.value, userId: user.$id })}
+      }>
         form
+        <input ref={input} type="text" placeholder="enter todo..." />
+
+        <button style={{ border: "2px solid black" }} type="submit">
+          Add todo
+        </button>
       </form>
-      <SubmitTodo />
+
     </section>
   )
 }

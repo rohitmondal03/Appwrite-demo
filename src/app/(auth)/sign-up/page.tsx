@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 
 
 export default function SigninPage() {
-  const { changeSession, isSession } = useAuth();
+  const { isSession, signUpUser } = useAuth();
   const { push } = useRouter();
   const [user, setUser] = useState({
     email: "",
@@ -20,21 +20,11 @@ export default function SigninPage() {
   if (isSession) push("/todos")
 
 
-  function signIn(email: string, password: string) {
-    const uId = ID.unique();
-    const promise = appwriteAccount.create(uId, email, password);
-
-    promise
-      .then(() => changeSession(true))
-      .catch((error: Error) => alert(error.message))
-  }
-
-
   return (
     <section>
       <form onSubmit={(e) => {
         e.preventDefault();
-        signIn(user.email, user.password);
+        signUpUser(user.email, user.password);
       }}>
         <input
           type="text"
