@@ -1,22 +1,20 @@
 "use client"
 
 import { useRouter } from 'next/navigation';
-import { createContext, useEffect } from 'react'
-import { useAtom } from 'jotai';
+import { createContext, useEffect, useState } from 'react'
 import { ID, Models } from 'appwrite';
 
-import type { TLayoutProps, TUserDetails } from 'types';
-import { isSessionPresent, userDetails } from '../atoms/atoms';
+import type { TLayoutProps } from 'types';
 import { appwriteAccount } from '../appwrite';
 
 
 type TAuthContext = {
   isSession: boolean;
   // user: TUserDetails;
-  user: Models.User<Models.Preferences>;
-  signUpUser: (email: string, password: string) => void;
-  logInUser: (email: string, password: string) => void;
-  logout: () => void;
+  user: Models.User<Models.Preferences> | null;
+  signUpUser: (email: string, password: string) => Promise<void>;
+  logInUser: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
 }
 
 
@@ -24,9 +22,9 @@ export const AuthContext = createContext<TAuthContext | undefined>(undefined);
 
 
 export default function UserContextProvider({ children }: TLayoutProps) {
-  const [isSession, setSession] = useAtom(isSessionPresent);
-  const [user, setUser] = useAtom(userDetails);
-  const { push } = useRouter();
+  const [isSession, setSession] = useState(false);
+  const [user, setUser] = useState<Models.User<Models.Preferences> | null>(null);
+  const router = useRouter();
 
 
   // sign up user
@@ -35,7 +33,7 @@ export default function UserContextProvider({ children }: TLayoutProps) {
 
     await appwriteAccount.create(uId, email, password)
       .then(async () => await logInUser(email, password))
-      .catch((error: Error) => alert(`Can't set session. ${error}`))
+      .catch((error: Error) => alert(`Can't set session. ${error.message}`))
   }
 
 
@@ -47,7 +45,7 @@ export default function UserContextProvider({ children }: TLayoutProps) {
         setUser(user);
         setSession(true)
       })
-      .catch((error: Error) => alert(`Can't set session. ${error}`))
+      .catch((error: Error) => alert(`Can't set session. ${error.message}`))
   }
 
 
@@ -57,7 +55,7 @@ export default function UserContextProvider({ children }: TLayoutProps) {
       .then(() => {
         setSession(false);
         setUser(null);
-        push("/")
+        router.push("/")
       })
       .catch(err => alert(`Can't logout. ${err}`))
   }
@@ -78,8 +76,8 @@ export default function UserContextProvider({ children }: TLayoutProps) {
 
   useEffect(() => {
     fetchUserDetails();
-    console.log(user)
-  }, [isSession])
+    console.log("Current user details", user)
+  }, [isSession, user])
 
 
   return (

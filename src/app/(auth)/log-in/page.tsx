@@ -1,6 +1,6 @@
 "use client"
 
-import { redirect, useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { useState } from "react";
 
 import { useAuth } from "@/hooks/use-auth";
@@ -8,7 +8,6 @@ import { useAuth } from "@/hooks/use-auth";
 
 export default function LogInPage() {
   const { isSession, logInUser } = useAuth();
-  const { push } = useRouter();
   const [user, setUser] = useState({
     email: "",
     password: "",

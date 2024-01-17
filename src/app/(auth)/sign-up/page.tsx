@@ -1,23 +1,21 @@
 "use client"
 
 import { useState } from "react";
-import { ID } from "appwrite"
 
-import { appwriteAccount } from "@/lib/appwrite"
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
 
 
 export default function SigninPage() {
   const { isSession, signUpUser } = useAuth();
-  const { push } = useRouter();
+  const router = useRouter();
   const [user, setUser] = useState({
     email: "",
     password: ""
   })
 
 
-  if (isSession) push("/todos")
+  if (isSession) router.push("/todos")
 
 
   return (

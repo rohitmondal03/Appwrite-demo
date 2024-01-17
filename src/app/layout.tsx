@@ -2,7 +2,7 @@ import { Inter } from "next/font/google";
 import { type Metadata } from "next";
 
 import type { TLayoutProps } from "types";
-import JotaiProvider from "@/lib/providers/jotai-provider";
+// import JotaiProvider from "@/lib/providers/jotai-provider";
 import AuthContextProvider from "@/lib/providers/auth-context-provider";
 import Navbar from "@/components/navbar";
 import "@/styles/globals.css";
@@ -24,10 +24,10 @@ export default function RootLayout({ children }: TLayoutProps) {
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
         <AuthContextProvider>
-          <JotaiProvider>
+          {/* <JotaiProvider> */}
             <Navbar />
             <main>{children}</main>
-          </JotaiProvider>
+          {/* </JotaiProvider> */}
         </AuthContextProvider>
       </body>
     </html>

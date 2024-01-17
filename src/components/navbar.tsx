@@ -7,7 +7,7 @@ import { useAuth } from "@/hooks/use-auth"
 
 export default function Navbar() {
   const { isSession, logout } = useAuth();
-  const { push } = useRouter();
+  const router = useRouter();
 
 
   return (
@@ -19,7 +19,7 @@ export default function Navbar() {
         {isSession ? (
           <button onClick={logout}>Sign out</button>
         ) : (
-          <button onClick={() => push("/sign-up")}>Sign In</button>
+          <button onClick={() => router.push("/sign-up")}>Sign In</button>
         )}
       </div>
     </nav>
