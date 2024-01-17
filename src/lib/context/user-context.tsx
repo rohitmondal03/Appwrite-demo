@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { createContext, useEffect, useState } from 'react'
-import { ID, Models } from 'appwrite';
+import { ID, type Models } from 'appwrite';
 
 import type { TLayoutProps } from 'types';
 import { appwriteAccount } from '../appwrite';
@@ -10,7 +10,6 @@ import { appwriteAccount } from '../appwrite';
 
 type TAuthContext = {
   isSession: boolean;
-  // user: TUserDetails;
   user: Models.User<Models.Preferences> | null;
   signUpUser: (email: string, password: string) => Promise<void>;
   logInUser: (email: string, password: string) => Promise<void>;
@@ -75,9 +74,9 @@ export default function UserContextProvider({ children }: TLayoutProps) {
 
 
   useEffect(() => {
-    fetchUserDetails();
+    void fetchUserDetails();
     console.log("Current user details", user)
-  }, [isSession, user])
+  }, [isSession])
 
 
   return (

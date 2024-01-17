@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter } from "next/navigation";
-import { useRef } from "react";
+import { useState } from "react";
 
 import { useAuth } from "@/hooks/use-auth"
 import { addTodo } from "@/lib/functions/add-todo";
@@ -10,7 +10,7 @@ import { addTodo } from "@/lib/functions/add-todo";
 export default function ToDosPage() {
   const { isSession, user } = useAuth();
   const router = useRouter();
-  const input = useRef<HTMLInputElement | null>(null)
+  const [input, setInput]= useState<string>()
 
   if (!isSession) {
     router.push("/log-in")
@@ -21,16 +21,17 @@ export default function ToDosPage() {
     <section>
       <form onSubmit={async (e) => {
         e.preventDefault();
-        await addTodo({ todo: input.current?.value, userId: String(user?.$id) })}
+        await addTodo({ todo: input, userId: user?.$id})}
       }>
         form
-        <input ref={input} type="text" placeholder="enter todo..." />
+        <input type="text" placeholder="enter todo..." 
+          value={input} onChange={(e) => setInput(e.target.value)}
+        />
 
         <button style={{ border: "2px solid black" }} type="submit">
           Add todo
         </button>
       </form>
-
     </section>
   )
 }
