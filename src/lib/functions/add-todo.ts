@@ -1,4 +1,3 @@
-import { revalidatePath } from "next/cache";
 import { ID } from "appwrite";
 
 import { appWriteDb } from "@/lib/appwrite";
@@ -14,7 +13,6 @@ export async function addTodo(todo: Omit<Document, keyof Document>) {
   )
     .then((resp) => {
       console.log("Successfully created Todo with ID ", resp.$id);
-      revalidatePath("/todos")
     })
     .catch((err) => console.log(err))
 }

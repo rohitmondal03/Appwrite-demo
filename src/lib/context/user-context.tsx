@@ -76,7 +76,7 @@ export default function UserContextProvider({ children }: TLayoutProps) {
   useEffect(() => {
     void fetchUserDetails();
     console.log("Current user details", user)
-  }, [isSession])
+  }, [isSession, user])
 
 
   return (

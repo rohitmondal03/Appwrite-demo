@@ -15,14 +15,14 @@ export default function SigninPage() {
   })
 
 
-  if (isSession) router.push("/todos")
+  if (isSession) router.push("/your-todos")
 
 
   return (
     <section>
-      <form onSubmit={(e) => {
+      <form onSubmit={async(e) => {
         e.preventDefault();
-        signUpUser(user.email, user.password);
+        await signUpUser(user.email, user.password);
       }}>
         <input
           type="text"

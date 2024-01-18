@@ -16,7 +16,7 @@ export default function LogInPage() {
 
 
   // session present ==> redirect
-  if (isSession) router.push("/todos");
+  if (isSession) router.push("/your-todos");
 
 
   return (
@@ -25,9 +25,9 @@ export default function LogInPage() {
 
       <form
         className="w-[50%] px-10 flex flex-col space-y-10"
-        onSubmit={(e) => {
+        onSubmit={async (e) => {
           e.preventDefault();
-          logInUser(user.email, user.password)
+          await logInUser(user.email, user.password)
         }}
       >
         <h1 className="text-3xl font-bold">Welcome back User</h1>
